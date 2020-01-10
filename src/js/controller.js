@@ -1,4 +1,4 @@
-import { slurpPoint } from "./util";
+import { slurpPoint, loop } from "./util";
 
 const SIDE = 20;
 const HEIGHT = 2 * SIDE;
@@ -27,9 +27,9 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
-		for (let i = 0; i < 3; i++) {
+		for (let i = 0; i < 6; i++) {
 			this.renderZigZag(context, this.animAmt);
-			context.rotate(2 * Math.PI / 3);
+			context.rotate(2 * Math.PI / 6);
 		}
 	}
 
