@@ -15,6 +15,13 @@ export function slurp(val1, val2, amt) {
     return (val2 - val1) * amt + val1;
 }
 
+export function slurpPoint(p1, p2, amt) {
+    return {
+        x: slurp(p1.x, p2.x, amt),
+        y: slurp(p1.y, p2.y, amt),
+    }
+}
+
 export function experp(val1, val2, amt) {
     return Math.exp(
         slurp(

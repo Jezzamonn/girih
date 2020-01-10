@@ -1,3 +1,9 @@
+import { slurpPoint } from "./util";
+
+const SIDE = 20;
+const HEIGHT = 2 * SIDE;
+const WIDTH = Math.sqrt(3) * SIDE;
+
 export default class Controller {
 
 	constructor() {
@@ -21,14 +27,54 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
-		context.beginPath();
-		context.fillStyle = 'black';
-		context.moveTo(0, 0);
-		context.arc(0, 0, 100, 0, 2 * Math.PI * this.animAmt);
-		context.fill();
+		this.renderZigZag(context, this.animAmt);
+	}
 
-		context.scale(10, 10);
-		context.fillText(this.period * this.animAmt, 0, 0);
+	/**
+	 * @param {!CanvasRenderingContext2D} context
+	 */
+	renderZigZag(context, amt) {
+		const points = [
+			{
+				x: -WIDTH / 2,
+				y: HEIGHT / 4,
+			},
+		];
+
+		for (let i = 0; i < 5; i++) {
+			{
+				const lastPoint = points[points.length - 1];
+				const newPoint = {
+					x: lastPoint.x,
+					y: lastPoint.y - SIDE * 2,
+				}
+				points.push(newPoint);
+			}
+			{
+				const lastPoint = points[points.length - 1];
+				const newPoint = {
+					x: lastPoint.x + WIDTH,
+					y: lastPoint.y - SIDE,
+				}
+				points.push(newPoint);
+			}
+		}
+
+		context.beginPath();
+		context.strokeStyle = 'black';
+		context.moveTo(points[0].x, points[0].y);
+
+		const totalLength = points.length - 1;
+		let remainingLength = amt * totalLength;
+		for (let i = 1; i < points.length; i++) { 
+			let point = points[i];
+			if (remainingLength < 1) {
+				point = slurpPoint(points[i], points[i - 1], remainingLength);
+			}
+			context.lineTo(point.x, point.y);
+			remainingLength --;
+		}
+		context.stroke();
 	}
 
 }
