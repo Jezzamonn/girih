@@ -27,6 +27,13 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
+		// context.beginPath();
+		// context.moveTo(-1000, 0);
+		// context.lineTo(1000, 0);
+		// context.moveTo(0, -1000);
+		// context.lineTo(0, 1000);
+		// context.stroke();
+
 		for (let i = 0; i < 6; i++) {
 			this.renderZigZag(context, this.animAmt);
 			context.rotate(2 * Math.PI / 6);
@@ -36,11 +43,11 @@ export default class Controller {
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	renderZigZag(context, amt) {
+	renderZigZag(context, amt, direction = 1) {
 		const points = [
 			{
 				x: -WIDTH / 2,
-				y: HEIGHT / 4,
+				y: -HEIGHT / 4,
 			},
 		];
 
@@ -49,15 +56,15 @@ export default class Controller {
 				const lastPoint = points[points.length - 1];
 				const newPoint = {
 					x: lastPoint.x,
-					y: lastPoint.y - SIDE * 2,
+					y: lastPoint.y - direction * SIDE * 2,
 				}
 				points.push(newPoint);
 			}
 			{
 				const lastPoint = points[points.length - 1];
 				const newPoint = {
-					x: lastPoint.x + WIDTH,
-					y: lastPoint.y - SIDE,
+					x: lastPoint.x + direction * WIDTH,
+					y: lastPoint.y - direction * SIDE,
 				}
 				points.push(newPoint);
 			}
