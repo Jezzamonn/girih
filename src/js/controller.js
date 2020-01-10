@@ -29,12 +29,15 @@ export default class Controller {
 	render(context) {
 		context.strokeStyle = 'black';
 		context.lineWidth = 1;
-		this.renderAllPatterns(context, this.animAmt + 0.5);
+		this.renderAllPatterns(context, this.animAmt + 1);
 		context.strokeStyle = 'white';
 		context.lineWidth = 3;
-		this.renderAllPatterns(context, this.animAmt);
+		this.renderAllPatterns(context, this.animAmt + 0.5);
 		context.strokeStyle = 'black';
 		context.lineWidth = 1;
+		this.renderAllPatterns(context, this.animAmt + 0);
+		context.strokeStyle = 'white';
+		context.lineWidth = 3;
 		this.renderAllPatterns(context, this.animAmt - 0.5);
 	}
 
