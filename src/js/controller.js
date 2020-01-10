@@ -36,7 +36,7 @@ export default class Controller {
 	renderAllPatterns(context, animAmt) {
 		const patternRepeatRadius = 2 * WIDTH;
 		const sides = 6;
-		const layers = 2;
+		const layers = 3;
 		for (var l = 0; l < layers; l++) {
 			for (let s = 0; s < (l == 0 ? 1 : sides); s++) {
 				const angle = 2 * Math.PI * s / sides;
@@ -46,8 +46,8 @@ export default class Controller {
 				for (let i = 0; i < shapesPerLayer; i++) {
 					const amt = i / shapesPerLayer;
 					
-					const x = patternRepeatRadius * slurp(Math.cos(angle), Math.cos(nextAngle), amt);
-					const y = patternRepeatRadius * slurp(Math.sin(angle), Math.sin(nextAngle), amt);
+					const x = l * patternRepeatRadius * slurp(Math.cos(angle), Math.cos(nextAngle), amt);
+					const y = l * patternRepeatRadius * slurp(Math.sin(angle), Math.sin(nextAngle), amt);
 
 					context.save();
 					context.translate(x, y);
