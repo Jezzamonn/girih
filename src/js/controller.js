@@ -39,7 +39,7 @@ export default class Controller {
 		const layers = 9;
 		for (var l = 0; l < layers; l++) {
 
-			const localAnimAmt = 10 * animAmt - 3 * l;
+			const localAnimAmt = 20 * animAmt - 3 * l;
 
 			for (let s = 0; s < (l == 0 ? 1 : sides); s++) {
 				const angle = 2 * Math.PI * s / sides;
