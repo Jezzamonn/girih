@@ -126,6 +126,7 @@ export default class Controller {
 			const beforeStart = Math.floor(startPos);
 			const afterStart = beforeStart + 1;
 			startPoint = slurpPoint(points[beforeStart], points[afterStart], startPos % 1);
+			startIndex = afterStart;
 		}
 
 		context.beginPath();
