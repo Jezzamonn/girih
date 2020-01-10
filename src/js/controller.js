@@ -27,7 +27,10 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
-		this.renderZigZag(context, this.animAmt);
+		for (let i = 0; i < 3; i++) {
+			this.renderZigZag(context, this.animAmt);
+			context.rotate(2 * Math.PI / 3);
+		}
 	}
 
 	/**
