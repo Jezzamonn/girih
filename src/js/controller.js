@@ -66,7 +66,7 @@ export default class Controller {
 
 		const totalLength = points.length - 1;
 		let remainingLength = amt * totalLength;
-		for (let i = 1; i < points.length; i++) { 
+		for (let i = 1; i < points.length && remainingLength > 0; i++) { 
 			let point = points[i];
 			if (remainingLength < 1) {
 				point = slurpPoint(points[i - 1], points[i], remainingLength);
