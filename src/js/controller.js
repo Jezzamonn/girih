@@ -1,4 +1,4 @@
-import { slurpPoint, loop, slurp } from "./util";
+import { slurpPoint, loop, slurp, clamp } from "./util";
 
 const SIDE = 20;
 const HEIGHT = 2 * SIDE;
@@ -8,7 +8,7 @@ export default class Controller {
 
 	constructor() {
 		this.animAmt = 0;
-		this.period = 10;
+		this.period = 3;
 	}
 
 	/**
@@ -27,7 +27,7 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
-		this.renderAllPatterns(context, this.animAmt);
+		this.renderAllPatterns(context, clamp(1.1 * this.animAmt, 0, 1));
 	}
 
 	/**
@@ -101,13 +101,13 @@ export default class Controller {
 
 		let lineIndex = direction == 1 ? 0 : 1;
 
-		for (let i = 0; i < 20; i++) {
+		for (let i = 0; i < 1; i++) {
 			const line = lines[lineIndex];
 			lineIndex = 1 - lineIndex;
 			const lastPoint = points[points.length - 1];
 			const newPoint = {
-				x: lastPoint.x + direction * line.x,
-				y: lastPoint.y + direction * line.y,
+				x: lastPoint.x + 0.5 * direction * line.x,
+				y: lastPoint.y + 0.5 * direction * line.y,
 			}
 			points.push(newPoint);
 		}
