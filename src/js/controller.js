@@ -8,7 +8,7 @@ export default class Controller {
 
 	constructor() {
 		this.animAmt = 0;
-		this.period = 3;
+		this.period = 10;
 	}
 
 	/**
@@ -27,7 +27,7 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
-		this.renderAllPatterns(context, clamp(1.1 * this.animAmt, 0, 1));
+		this.renderAllPatterns(context, this.animAmt);
 	}
 
 	/**
@@ -36,10 +36,10 @@ export default class Controller {
 	renderAllPatterns(context, animAmt) {
 		const patternRepeatRadius = 2 * WIDTH;
 		const sides = 6;
-		const layers = 3;
+		const layers = 9;
 		for (var l = 0; l < layers; l++) {
 
-			const localAnimAmt = clamp(3 * animAmt - l)
+			const localAnimAmt = 10 * animAmt - 3 * l;
 
 			for (let s = 0; s < (l == 0 ? 1 : sides); s++) {
 				const angle = 2 * Math.PI * s / sides;
@@ -104,7 +104,7 @@ export default class Controller {
 
 		let lineIndex = direction == 1 ? 0 : 1;
 
-		for (let i = 0; i < 1; i++) {
+		for (let i = 0; i < Math.ceil(animAmt); i++) {
 			const line = lines[lineIndex];
 			lineIndex = 1 - lineIndex;
 			const lastPoint = points[points.length - 1];
@@ -119,8 +119,7 @@ export default class Controller {
 		context.strokeStyle = 'black';
 		context.moveTo(points[0].x, points[0].y);
 
-		const totalLength = points.length - 1;
-		let remainingLength = animAmt * totalLength;
+		let remainingLength = animAmt;
 		for (let i = 1; i < points.length && remainingLength > 0; i++) { 
 			let point = points[i];
 			if (remainingLength < 1) {
