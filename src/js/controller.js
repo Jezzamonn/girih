@@ -27,18 +27,22 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
+		const eraseSpeed = 1.7;
+
 		context.strokeStyle = 'black';
 		context.lineWidth = 1;
 		this.renderAllPatterns(context, this.animAmt + 1);
+
 		context.strokeStyle = 'white';
 		context.lineWidth = 3;
-		this.renderAllPatterns(context, this.animAmt + 0.5);
+		this.renderAllPatterns(context, eraseSpeed * (this.animAmt + 1 - 0.7));
 		context.strokeStyle = 'black';
 		context.lineWidth = 1;
+
 		this.renderAllPatterns(context, this.animAmt + 0);
 		context.strokeStyle = 'white';
 		context.lineWidth = 3;
-		this.renderAllPatterns(context, this.animAmt - 0.5);
+		this.renderAllPatterns(context, eraseSpeed * (this.animAmt - 0.7));
 	}
 
 	/**
