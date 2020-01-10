@@ -8,7 +8,7 @@ export default class Controller {
 
 	constructor() {
 		this.animAmt = 0;
-		this.period = 3;
+		this.period = 6;
 	}
 
 	/**
@@ -27,18 +27,28 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
-		// context.beginPath();
-		// context.moveTo(-1000, 0);
-		// context.lineTo(1000, 0);
-		// context.moveTo(0, -1000);
-		// context.lineTo(0, 1000);
-		// context.stroke();
-
-		for (let i = 0; i < 6; i++) {
-			this.renderZigZag(context, this.animAmt, 1);
-			this.renderZigZag(context, this.animAmt, -1);
+		for (let i = 0; i < 3; i++) {
+			this.renderZigZags(context, this.animAmt);
 			context.rotate(2 * Math.PI / 6);
 		}
+	}
+
+	/**
+	 * @param {!CanvasRenderingContext2D} context
+	 */
+	renderZigZags(context, amt) {
+		context.save();
+		const numLines = 20;
+		const translateAmt = 2 * WIDTH;
+		const firstOffset = Math.floor((numLines - 1) / 2);
+		context.translate(-translateAmt * firstOffset, 0);
+		for (let i = 0; i < numLines; i++) {
+			this.renderZigZag(context, amt, 1);
+			this.renderZigZag(context, amt, -1);
+
+			context.translate(translateAmt, 0);
+		}
+		context.restore();
 	}
 
 	/**
@@ -65,7 +75,7 @@ export default class Controller {
 
 		let lineIndex = direction == 1 ? 0 : 1;
 
-		for (let i = 0; i < 5; i++) {
+		for (let i = 0; i < 20; i++) {
 			const line = lines[lineIndex];
 			lineIndex = 1 - lineIndex;
 			const lastPoint = points[points.length - 1];
