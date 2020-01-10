@@ -1,4 +1,4 @@
-import { slurpPoint, loop } from "./util";
+import { slurpPoint, loop, slurp } from "./util";
 
 const SIDE = 20;
 const HEIGHT = 2 * SIDE;
@@ -8,7 +8,7 @@ export default class Controller {
 
 	constructor() {
 		this.animAmt = 0;
-		this.period = 6;
+		this.period = 10;
 	}
 
 	/**
@@ -27,8 +27,44 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
-		for (let i = 0; i < 3; i++) {
-			this.renderZigZags(context, this.animAmt);
+		this.renderAllPatterns(context, this.animAmt);
+	}
+
+	/**
+	 * @param {!CanvasRenderingContext2D} context
+	 */
+	renderAllPatterns(context, animAmt) {
+		const patternRepeatRadius = 2 * WIDTH;
+		const sides = 6;
+		const layers = 2;
+		for (var l = 0; l < layers; l++) {
+			for (let s = 0; s < (l == 0 ? 1 : sides); s++) {
+				const angle = 2 * Math.PI * s / sides;
+				const nextAngle = 2 * Math.PI * (s + 1) / sides;
+
+				const shapesPerLayer = l == 0 ? 1 : l;
+				for (let i = 0; i < shapesPerLayer; i++) {
+					const amt = i / shapesPerLayer;
+					
+					const x = patternRepeatRadius * slurp(Math.cos(angle), Math.cos(nextAngle), amt);
+					const y = patternRepeatRadius * slurp(Math.sin(angle), Math.sin(nextAngle), amt);
+
+					context.save();
+					context.translate(x, y);
+					this.renderStarPatternThing(context, animAmt);
+					context.restore();
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * @param {!CanvasRenderingContext2D} context
+	 */
+	renderStarPatternThing(context, animAmt) {
+		for (let i = 0; i < 6; i++) {
+			this.renderZigZags(context, animAmt);
 			context.rotate(2 * Math.PI / 6);
 		}
 	}
@@ -36,25 +72,15 @@ export default class Controller {
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	renderZigZags(context, amt) {
-		context.save();
-		const numLines = 20;
-		const translateAmt = 2 * WIDTH;
-		const firstOffset = Math.floor((numLines - 1) / 2);
-		context.translate(-translateAmt * firstOffset, 0);
-		for (let i = 0; i < numLines; i++) {
-			this.renderZigZag(context, amt, 1);
-			this.renderZigZag(context, amt, -1);
-
-			context.translate(translateAmt, 0);
-		}
-		context.restore();
+	renderZigZags(context, animAmt) {
+		this.renderZigZag(context, animAmt, 1);
+		this.renderZigZag(context, animAmt, -1);
 	}
 
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	renderZigZag(context, amt, direction = 1) {
+	renderZigZag(context, animAmt, direction = 1) {
 		const points = [
 			{
 				x: -WIDTH / 2,
@@ -91,7 +117,7 @@ export default class Controller {
 		context.moveTo(points[0].x, points[0].y);
 
 		const totalLength = points.length - 1;
-		let remainingLength = amt * totalLength;
+		let remainingLength = animAmt * totalLength;
 		for (let i = 1; i < points.length && remainingLength > 0; i++) { 
 			let point = points[i];
 			if (remainingLength < 1) {
