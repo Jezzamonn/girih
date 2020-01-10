@@ -27,7 +27,10 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
+		context.strokeStyle = 'black';
 		this.renderAllPatterns(context, this.animAmt);
+		context.strokeStyle = 'white';
+		this.renderAllPatterns(context, this.animAmt - 0.5);
 	}
 
 	/**
@@ -116,7 +119,6 @@ export default class Controller {
 		}
 
 		context.beginPath();
-		context.strokeStyle = 'black';
 		context.moveTo(points[0].x, points[0].y);
 
 		let remainingLength = animAmt;
