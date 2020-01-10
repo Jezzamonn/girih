@@ -57,7 +57,7 @@ export default class Controller {
 
 					context.save();
 					context.translate(x, y);
-					this.renderStarPatternThing(context, 2 + s, 2 + s, startPos, endPos);
+					this.renderStarPatternThing(context, 2 + s, 3 + s, startPos, endPos);
 					context.restore();
 				}
 			}
