@@ -38,6 +38,9 @@ export default class Controller {
 		const sides = 6;
 		const layers = 3;
 		for (var l = 0; l < layers; l++) {
+
+			const localAnimAmt = clamp(3 * animAmt - l)
+
 			for (let s = 0; s < (l == 0 ? 1 : sides); s++) {
 				const angle = 2 * Math.PI * s / sides;
 				const nextAngle = 2 * Math.PI * (s + 1) / sides;
@@ -51,7 +54,7 @@ export default class Controller {
 
 					context.save();
 					context.translate(x, y);
-					this.renderStarPatternThing(context, animAmt);
+					this.renderStarPatternThing(context, localAnimAmt);
 					context.restore();
 				}
 			}
@@ -106,8 +109,8 @@ export default class Controller {
 			lineIndex = 1 - lineIndex;
 			const lastPoint = points[points.length - 1];
 			const newPoint = {
-				x: lastPoint.x + 0.5 * direction * line.x,
-				y: lastPoint.y + 0.5 * direction * line.y,
+				x: lastPoint.x + direction * line.x,
+				y: lastPoint.y + direction * line.y,
 			}
 			points.push(newPoint);
 		}
