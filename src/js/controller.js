@@ -29,13 +29,13 @@ export default class Controller {
 	render(context) {
 		context.strokeStyle = 'black';
 		context.lineWidth = 1;
-		this.renderAllPatterns(context, this.animAmt + 0.5);
-		context.strokeStyle = 'white';
-		context.lineWidth = 2;
 		this.renderAllPatterns(context, this.animAmt);
-		context.strokeStyle = 'black';
-		context.lineWidth = 1;
-		this.renderAllPatterns(context, this.animAmt - 0.5);
+		// context.strokeStyle = 'white';
+		// context.lineWidth = 2;
+		// this.renderAllPatterns(context, this.animAmt);
+		// context.strokeStyle = 'black';
+		// context.lineWidth = 1;
+		// this.renderAllPatterns(context, this.animAmt - 0.5);
 	}
 
 	/**
@@ -49,7 +49,7 @@ export default class Controller {
 
 			const localAnimAmt = 20 * animAmt - 3 * l;
 
-			for (let s = 0; s < (l == 0 ? 1 : sides); s++) {
+			for (let s = 0; s < sides; s++) {
 				const angle = 2 * Math.PI * s / sides;
 				const nextAngle = 2 * Math.PI * (s + 1) / sides;
 
@@ -62,21 +62,22 @@ export default class Controller {
 
 					context.save();
 					context.translate(x, y);
-					this.renderStarPatternThing(context, localAnimAmt);
+					this.renderStarPatternThing(context, 2 + s, 2 + s, localAnimAmt);
 					context.restore();
 				}
 			}
 		}
-
 	}
 
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	renderStarPatternThing(context, animAmt) {
-		for (let i = 0; i < 6; i++) {
+	renderStarPatternThing(context, startI, endI, animAmt) {
+		for (let i = startI; i <= endI; i++) {
+			context.save();
+			context.rotate(i * 2 * Math.PI / 6);
 			this.renderZigZags(context, animAmt);
-			context.rotate(2 * Math.PI / 6);
+			context.restore();
 		}
 	}
 
