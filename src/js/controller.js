@@ -35,7 +35,8 @@ export default class Controller {
 		// context.stroke();
 
 		for (let i = 0; i < 6; i++) {
-			this.renderZigZag(context, this.animAmt);
+			this.renderZigZag(context, this.animAmt, 1);
+			this.renderZigZag(context, this.animAmt, -1);
 			context.rotate(2 * Math.PI / 6);
 		}
 	}
@@ -51,23 +52,28 @@ export default class Controller {
 			},
 		];
 
+		const lines = [
+			{
+				x: 0,
+				y: -SIDE * 2,
+			},
+			{
+				x: WIDTH,
+				y: -SIDE,
+			},
+		]
+
+		let lineIndex = direction == 1 ? 0 : 1;
+
 		for (let i = 0; i < 5; i++) {
-			{
-				const lastPoint = points[points.length - 1];
-				const newPoint = {
-					x: lastPoint.x,
-					y: lastPoint.y - direction * SIDE * 2,
-				}
-				points.push(newPoint);
+			const line = lines[lineIndex];
+			lineIndex = 1 - lineIndex;
+			const lastPoint = points[points.length - 1];
+			const newPoint = {
+				x: lastPoint.x + direction * line.x,
+				y: lastPoint.y + direction * line.y,
 			}
-			{
-				const lastPoint = points[points.length - 1];
-				const newPoint = {
-					x: lastPoint.x + direction * WIDTH,
-					y: lastPoint.y - direction * SIDE,
-				}
-				points.push(newPoint);
-			}
+			points.push(newPoint);
 		}
 
 		context.beginPath();
