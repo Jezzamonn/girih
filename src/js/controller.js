@@ -29,25 +29,20 @@ export default class Controller {
 	render(context) {
 		context.strokeStyle = 'black';
 		context.lineWidth = 1;
-		this.renderAllPatterns(context, this.animAmt + 0.5);
-		context.strokeStyle = 'white';
-		context.lineWidth = 2;
-		this.renderAllPatterns(context, this.animAmt);
-		context.strokeStyle = 'black';
-		context.lineWidth = 1;
-		this.renderAllPatterns(context, this.animAmt - 0.5);
+		this.renderAllPatterns(context, this.animAmt - 0.5, this.animAmt);
 	}
 
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	renderAllPatterns(context, animAmt) {
+	renderAllPatterns(context, startAmt, endAmt) {
 		const patternRepeatRadius = 2 * WIDTH;
 		const sides = 6;
 		const layers = 9;
 		for (var l = 0; l < layers; l++) {
 
-			const localAnimAmt = 20 * animAmt - 3 * l;
+			const startPos = 20 * startAmt - 3 * l;
+			const endPos = 20 * endAmt - 3 * l;
 
 			for (let s = 0; s < sides; s++) {
 				const angle = 2 * Math.PI * s / sides;
@@ -62,7 +57,7 @@ export default class Controller {
 
 					context.save();
 					context.translate(x, y);
-					this.renderStarPatternThing(context, 2 + s, 2 + s, localAnimAmt);
+					this.renderStarPatternThing(context, 2 + s, 2 + s, startPos, endPos);
 					context.restore();
 				}
 			}
@@ -72,11 +67,11 @@ export default class Controller {
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	renderStarPatternThing(context, startI, endI, animAmt) {
+	renderStarPatternThing(context, startI, endI, startPos, endPos) {
 		for (let i = startI; i <= endI; i++) {
 			context.save();
 			context.rotate(i * 2 * Math.PI / 6);
-			this.renderZigZags(context, animAmt);
+			this.renderZigZags(context, startPos, endPos);
 			context.restore();
 		}
 	}
@@ -84,15 +79,15 @@ export default class Controller {
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	renderZigZags(context, animAmt) {
-		this.renderZigZag(context, animAmt, 1);
-		this.renderZigZag(context, animAmt, -1);
+	renderZigZags(context, startPos, endPos) {
+		this.renderZigZag(context, startPos, endPos, 1);
+		this.renderZigZag(context, startPos, endPos, -1);
 	}
 
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	renderZigZag(context, animAmt, direction = 1) {
+	renderZigZag(context, startPos, endPos, direction = 1) {
 		const points = [
 			{
 				x: -WIDTH / 2,
@@ -113,7 +108,7 @@ export default class Controller {
 
 		let lineIndex = direction == 1 ? 0 : 1;
 
-		for (let i = 0; i < Math.ceil(animAmt); i++) {
+		for (let i = 0; i < Math.ceil(endPos); i++) {
 			const line = lines[lineIndex];
 			lineIndex = 1 - lineIndex;
 			const lastPoint = points[points.length - 1];
@@ -124,11 +119,20 @@ export default class Controller {
 			points.push(newPoint);
 		}
 
-		context.beginPath();
-		context.moveTo(points[0].x, points[0].y);
+		let startPoint = points[0];
+		let startIndex = 1;
+		startPos = clamp(startPos, 0, Infinity);
+		if (points.length > 1) {
+			const beforeStart = Math.floor(startPos);
+			const afterStart = beforeStart + 1;
+			startPoint = slurpPoint(points[beforeStart], points[afterStart], startPos % 1);
+		}
 
-		let remainingLength = animAmt;
-		for (let i = 1; i < points.length && remainingLength > 0; i++) { 
+		context.beginPath();
+		context.moveTo(startPoint.x, startPoint.y);
+
+		let remainingLength = endPos - (startIndex - 1);
+		for (let i = startIndex; i < points.length && remainingLength > 0; i++) {
 			let point = points[i];
 			if (remainingLength < 1) {
 				point = slurpPoint(points[i - 1], points[i], remainingLength);
