@@ -69,7 +69,7 @@ export default class Controller {
 		for (let i = 1; i < points.length; i++) { 
 			let point = points[i];
 			if (remainingLength < 1) {
-				point = slurpPoint(points[i], points[i - 1], remainingLength);
+				point = slurpPoint(points[i - 1], points[i], remainingLength);
 			}
 			context.lineTo(point.x, point.y);
 			remainingLength --;
