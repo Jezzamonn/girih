@@ -31,7 +31,7 @@ export default class Controller {
 		context.lineWidth = 1;
 		this.renderAllPatterns(context, this.animAmt + 0.5);
 		context.strokeStyle = 'white';
-		context.lineWidth = 2;
+		context.lineWidth = 3;
 		this.renderAllPatterns(context, this.animAmt);
 		context.strokeStyle = 'black';
 		context.lineWidth = 1;
